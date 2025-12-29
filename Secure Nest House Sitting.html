@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SecureNest House Sitting | Professional care while you’re away</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f7f9fc;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #0a2540;
+      color: #fff;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    nav {
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #0a2540;
+      font-weight: bold;
+    }
+
+    section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 { color: #0a2540; }
+
+    .btn {
+      display: inline-block;
+      background: #1d4ed8;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin: 10px 5px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn.secondary { background: #0a2540; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    footer {
+      background: #0a2540;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <svg width="110" height="110" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 10 L180 40 V110 C180 145 145 175 100 190 C55 175 20 145 20 110 V40 Z" fill="#0a2540" />
+    <path d="M55 95 L100 55 L145 95 V145 H110 V115 H90 V145 H55 Z" fill="#ffffff" />
+    <circle cx="100" cy="115" r="12" fill="#1d4ed8" />
+    <text x="100" y="165" text-anchor="middle" font-size="22" font-weight="bold" fill="#ffffff">SN</text>
+  </svg>
+  <h1>SecureNest House Sitting</h1>
+  <p>Enjoy your holiday — we’ll keep your home and pets happy.</p>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#services">Services</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#auth">Login / Register</a>
+</nav>
+
+<section id="home">
+  <h2>Peace of mind for your home and pets, wherever your holiday takes you .</h2>
+  <p>SecureNest House Sitting provides professional house sitting and pet care services across South Africa. We keep your home secure, lived-in, and cared for while you are away.</p>
+</section>
+
+<section id="services">
+  <h2>Our Services</h2>
+  <div class="grid">
+    <div class="card">🏠 House Sitting (Overnight & Long-Term)</div>
+    <div class="card">🐾 Pet Feeding & Basic Care</div>
+    <div class="card">📬 Mail Collection</div>
+    <div class="card">🌱 Plant Watering</div>
+    <div class="card">📸 Daily Reports</div>
+  </div>
+</section>
+
+<section id="pricing">
+  <h2>Pricing</h2>
+  <div class="grid">
+    <div class="card">Day Visits<br><strong>R150 – R300</strong></div>
+    <div class="card">Overnight<br><strong>R350 – R600</strong></div>
+    <div class="card">Monthly<br><strong>R7,000 – R12,000</strong></div>
+  </div>
+</section>
+
+<section id="auth">
+  <h2>User Access</h2>
+  <p>Create an account or log in to manage your bookings.</p>
+
+  <!-- Slider Tabs -->
+  <div style="display:flex; justify-content:center; margin-bottom:20px;">
+    <button id="loginTab" class="btn" onclick="showLogin()">Login</button>
+    <button id="registerTab" class="btn secondary" onclick="showRegister()">Create Account</button>
+  </div>
+
+  <!-- Login Form -->
+  <div id="loginForm" class="card">
+    <h3>Login</h3>
+    <input type="email" placeholder="Email Address" required />
+    <input type="password" placeholder="Password" required />
+    <button class="btn" onclick="loginUser()">Sign In</button>
+  </div>
+
+  <!-- Register Form -->
+  <div id="registerForm" class="card hidden">
+    <h3>Create Account</h3>
+    <input type="text" placeholder="Full Name" required />
+    <input type="email" placeholder="Email Address" required />
+    <input type="tel" placeholder="Phone Number" required />
+    <select required>
+      <option value="">Account Type</option>
+      <option>Home Owner</option>
+      <option>House Sitter</option>
+    </select>
+    <input type="password" placeholder="Create Password" required />
+    <button class="btn" onclick="registerUser()">Create Profile</button>
+  </div>
+</section>
+
+<footer>
+  © 2025 SecureNest House Sitting | South Africa
+</footer>
+
+<script>
+  function showLogin() {
+    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('registerForm').classList.add('hidden');
+  }
+
+  function showRegister() {
+    document.getElementById('registerForm').classList.remove('hidden');
+    document.getElementById('loginForm').classList.add('hidden');
+  }
+
+  function loginUser() {
+    alert('Login submitted. Backend integration required.');
+  }
+
+  function registerUser() {
+    alert('Registration submitted. Backend integration required.');
+  }
+</script>
+
+</body>
+</html>
