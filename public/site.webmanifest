@@ -1,0 +1,10 @@
+{
+  "name": "Dynamic Spray Works",
+  "short_name": "DSW",
+  "description": "Professional airless spray painting services in South Africa.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b111d",
+  "theme_color": "#3b92ff",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
