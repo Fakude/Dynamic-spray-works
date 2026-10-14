@@ -91,7 +91,7 @@ export default function QuoteForm() {
     }
 
     const message = [
-      "Hello Dynamic Spray Works, I would like a free quotation.",
+      "Hello Coating Solutions, I would like a free quotation.",
       "",
       `Service: ${serviceLabel(form.service)}`,
       `Location: ${form.location.trim()}`,
@@ -308,7 +308,7 @@ export default function QuoteForm() {
                   className="mt-1 h-4 w-4 accent-primary"
                 />
                 <span className="text-xs leading-relaxed text-muted-foreground">
-                  I agree to share these details with Dynamic Spray Works on WhatsApp for
+                  I agree to share these details with Coating Solutions on WhatsApp for
                   the purpose of preparing and following up on this quotation.
                 </span>
               </label>

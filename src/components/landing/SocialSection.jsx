@@ -3,13 +3,13 @@ import { ExternalLink, MessageCircle, Share2 } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 
 const SITE_URL = "https://d1grabyq9lwdv8.cloudfront.net/";
-const shareText = encodeURIComponent("Professional spray painting by Dynamic Spray Works");
+const shareText = encodeURIComponent("Professional spray painting by Coating Solutions");
 
 export default function SocialSection() {
   const shareSite = async () => {
     trackEvent("share_click", { placement: "social_section" });
     try {
-      if (navigator.share) await navigator.share({ title: "Dynamic Spray Works", text: "Professional spray painting services", url: SITE_URL });
+      if (navigator.share) await navigator.share({ title: "Coating Solutions", text: "Professional spray painting services", url: SITE_URL });
       else window.open(`https://wa.me/?text=${shareText}%20${encodeURIComponent(SITE_URL)}`, "_blank", "noopener,noreferrer");
     } catch {
       // The visitor cancelled the native share dialog.
@@ -25,7 +25,7 @@ export default function SocialSection() {
             <ExternalLink className="mb-8 h-6 w-6 text-primary" /><h3 className="font-heading font-bold text-foreground">Follow on TikTok</h3><p className="mt-2 text-sm text-muted-foreground">Watch project and spray-painting content from @coatingsolutions.</p>
           </a>
           <button type="button" onClick={shareSite} className="group bg-card p-6 text-left transition-colors hover:bg-secondary">
-            <Share2 className="mb-8 h-6 w-6 text-primary" /><h3 className="font-heading font-bold text-foreground">Share our website</h3><p className="mt-2 text-sm text-muted-foreground">Send Dynamic Spray Works to someone planning a painting project.</p><MessageCircle className="mt-4 h-4 w-4 text-muted-foreground" />
+            <Share2 className="mb-8 h-6 w-6 text-primary" /><h3 className="font-heading font-bold text-foreground">Share our website</h3><p className="mt-2 text-sm text-muted-foreground">Send Coating Solutions to someone planning a painting project.</p><MessageCircle className="mt-4 h-4 w-4 text-muted-foreground" />
           </button>
         </div>
       </div>

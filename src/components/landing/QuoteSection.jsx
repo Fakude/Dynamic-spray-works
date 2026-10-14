@@ -44,7 +44,7 @@ export default function QuoteSection() {
             </h2>
             <p className="mb-9 max-w-lg font-body text-lg leading-relaxed text-muted-foreground">
               Add your project, contact, and location details; review everything; then
-              send the prepared request directly to Dynamic Spray Works on WhatsApp.
+              send the prepared request directly to Coating Solutions on WhatsApp.
             </p>
 
             <div className="space-y-4">

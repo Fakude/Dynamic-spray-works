@@ -34,12 +34,12 @@ export default function Navbar() {
           <a href="#home" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
               <span className="font-heading font-black text-primary-foreground text-lg">
-                DSW
+                CS
               </span>
             </div>
             <div className="hidden sm:block">
               <p className="font-heading font-bold text-foreground text-sm leading-tight">
-                Dynamic Spray Works
+                Coating Solutions
               </p>
               <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
                 Airless spray coating

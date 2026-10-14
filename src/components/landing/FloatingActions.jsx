@@ -3,7 +3,7 @@ import { MessageCircle, Phone } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 
 const PHONE = "27676244130";
-const message = encodeURIComponent("Hello Dynamic Spray Works, I would like a free quotation.");
+const message = encodeURIComponent("Hello Coating Solutions, I would like a free quotation.");
 
 export default function FloatingActions() {
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -32,7 +32,7 @@ export default function FloatingActions() {
         href={`tel:+${PHONE}`}
         onClick={() => trackEvent("phone_click", { placement: "floating_action" })}
         className="flex h-12 w-12 items-center justify-center self-end rounded-full border border-border bg-card text-primary shadow-lg transition hover:scale-105 hover:bg-secondary"
-        aria-label="Call Dynamic Spray Works"
+        aria-label="Call Coating Solutions"
       >
         <Phone className="h-5 w-5" />
       </a>

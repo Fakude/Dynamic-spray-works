@@ -11,12 +11,12 @@ export default function Footer() {
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
                 <span className="font-heading font-black text-primary-foreground text-lg">
-                  DSW
+                  CS
                 </span>
               </div>
               <div>
                 <p className="font-heading font-bold text-foreground text-sm leading-tight">
-                  Dynamic Spray Works
+                  Coating Solutions
                 </p>
                 <p className="text-[10px] text-muted-foreground tracking-wider">
                   (Pty) Ltd
@@ -95,7 +95,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-xs font-body text-muted-foreground">
-            &copy; {new Date().getFullYear()} Dynamic Spray Works (Pty) Ltd. All rights reserved.
+            &copy; {new Date().getFullYear()} Coating Solutions. All rights reserved.
           </p>
           <button
             type="button"

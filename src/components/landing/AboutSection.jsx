@@ -35,7 +35,7 @@ export default function AboutSection() {
           <p className="section-kicker">How the work moves</p>
           <h2 className="section-title mt-4">Good coating starts before the trigger is pulled.</h2>
           <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Dynamic Spray Works follows a clear sequence so the application suits the
+            Coating Solutions follows a clear sequence so the application suits the
             property—not just the production speed of the equipment.
           </p>
         </motion.div>
