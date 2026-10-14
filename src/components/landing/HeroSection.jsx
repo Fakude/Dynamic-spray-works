@@ -55,14 +55,17 @@ export default function HeroSection() {
     frameRef.current = -1;
     let cancelled = false;
     let settled = 0;
+    let started = false;
     const images = Array.from({ length: FRAME_COUNT }, (_, index) => {
       const image = new Image();
       const complete = () => {
         settled += 1;
         if (!cancelled) setProgress(Math.round((settled / FRAME_COUNT) * 100));
-        if (settled === FRAME_COUNT && !cancelled) {
-          imagesRef.current = images;
-          drawCover(canvasRef.current, images[0]);
+        // Start as soon as the first frame is usable; the remaining frames
+        // continue loading in the background instead of blocking the hero.
+        if (index === 0 && !started && !cancelled) {
+          started = true;
+          drawCover(canvasRef.current, image);
           setReady(true);
         }
       };
@@ -72,6 +75,7 @@ export default function HeroSection() {
       image.src = frameUrl(index);
       return image;
     });
+    imagesRef.current = images;
     document.body.classList.add("is-sequence-loading");
     return () => {
       cancelled = true;
@@ -90,8 +94,18 @@ export default function HeroSection() {
       if (index === frameRef.current) return;
       frameRef.current = index;
       canvasRef.current.dataset.frame = String(index + 1);
+      let image = imagesRef.current[index];
+      if (!image?.naturalWidth) {
+        for (let distance = 1; distance < FRAME_COUNT; distance += 1) {
+          const before = imagesRef.current[index - distance];
+          const after = imagesRef.current[index + distance];
+          image = before?.naturalWidth ? before : after?.naturalWidth ? after : null;
+          if (image) break;
+        }
+      }
+      if (!image) return;
       cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => drawCover(canvasRef.current, imagesRef.current[index]));
+      rafRef.current = requestAnimationFrame(() => drawCover(canvasRef.current, image));
     };
     renderFrame(0);
     const trigger = ScrollTrigger.create({
