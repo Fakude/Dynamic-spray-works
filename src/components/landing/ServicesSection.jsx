@@ -1,66 +1,64 @@
-import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const SERVICES = [
-  {
-    title: "Pavement Painting",
-    description: "Prepared and coated driveways, walkways and other suitable paved surfaces.",
-  },
-  {
-    title: "Roof Painting",
-    description: "Roof coating systems selected and applied for the surface, condition and exposure.",
-  },
-  {
-    title: "Boundary Wall Painting",
-    description: "Consistent coverage across long wall runs, corners, piers and detailed edges.",
-  },
-  {
-    title: "Site Preparation",
-    description: "Cleaning, masking and surface preparation matched to the job before coating begins.",
-  },
+  { number: "01", title: "Exterior Painting", description: "Even, controlled coverage across walls, trims and architectural details.", image: "/images/service-cutouts/exterior-house.png", watermark: "EXTERIOR" },
+  { number: "02", title: "Pavement Painting", description: "Driveways, walkways and pool surrounds prepared and coated as one considered surface.", image: "/images/service-cutouts/pavement-pool.png", watermark: "PAVING" },
+  { number: "03", title: "Boundary Walls", description: "Clean coverage across long runs, piers, corners and detailed edges.", image: "/images/service-cutouts/wall-house.png", watermark: "WALLS" },
 ];
 
-function ServiceRow({ service, index, reduceMotion }) {
-  return (
-    <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.45, delay: index * 0.06 }}
-      className="group grid gap-4 border-t border-border py-7 sm:grid-cols-[4rem_1fr_1.2fr] sm:items-start sm:gap-8 sm:py-9"
-    >
-      <span className="font-heading text-sm font-bold text-primary">0{index + 1}</span>
-      <h3 className="font-heading text-2xl font-bold uppercase leading-none text-foreground sm:text-3xl">{service.title}</h3>
-      <p className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">{service.description}</p>
-    </motion.div>
-  );
-}
-
 export default function ServicesSection() {
-  const reduceMotion = useReducedMotion();
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    gsap.registerPlugin(ScrollTrigger);
+    const cards = Array.from(sectionRef.current.querySelectorAll("[data-offer-card]"));
+    const animations = cards.map((card, index) => {
+      const image = card.querySelector("[data-offer-image]");
+      const direction = index % 2 === 0 ? -1 : 1;
+      return gsap.fromTo(image, { xPercent: direction * 38, opacity: 0.15, rotate: direction * -2 }, {
+        xPercent: 0,
+        opacity: 1,
+        rotate: 0,
+        ease: "power2.out",
+        scrollTrigger: {
+          id: `offer-${index + 1}`,
+          trigger: card,
+          start: "top 88%",
+          end: "top 44%",
+          scrub: 0.65,
+          invalidateOnRefresh: true,
+          onRefresh: (self) => {
+            const rect = card.getBoundingClientRect();
+            const documentTop = rect.top + window.scrollY;
+            window.__DSW_SCROLL_AUDIT__ = { ...(window.__DSW_SCROLL_AUDIT__ || {}), [`offer${index + 1}`]: { start: self.start, end: self.end, documentTop } };
+            card.dataset.triggerStart = String(self.start);
+            card.dataset.triggerEnd = String(self.end);
+            card.dataset.documentTop = String(documentTop);
+          },
+        },
+      });
+    });
+    ScrollTrigger.refresh();
+    return () => animations.forEach((animation) => animation.scrollTrigger?.kill());
+  }, []);
 
   return (
-    <section id="services" className="py-24 sm:py-32">
+    <section id="services" ref={sectionRef} className="offers-section">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-        <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-14 grid gap-5 md:grid-cols-[1fr_1fr] md:items-end"
-        >
-          <div>
-            <p className="section-kicker">What we coat</p>
-            <h2 className="section-title mt-4">Four services. One standard of finish.</h2>
-          </div>
-          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:justify-self-end md:text-base">
-            Every quotation is based on the surface in front of us—its condition,
-            access, preparation requirements and the coating system it needs.
-          </p>
-        </motion.div>
-
-        <div className="border-b border-border">
+        <div className="offers-heading">
+          <div><p className="section-kicker">What we coat</p><h2>Built for the surface.<br />Finished for the property.</h2></div>
+          <p>Every quote starts with the real condition of the surface: access, preparation, coating system and the standard the project needs.</p>
+        </div>
+        <div className="offers-list">
           {SERVICES.map((service, index) => (
-            <ServiceRow key={service.title} service={service} index={index} reduceMotion={reduceMotion} />
+            <article key={service.title} data-offer-card className={`offer-card ${index % 2 ? "offer-card--reverse" : ""}`}>
+              <span className="offer-card__watermark" aria-hidden="true">{service.watermark}</span>
+              <div className="offer-card__visual"><img data-offer-image src={service.image} alt="" /></div>
+              <div className="offer-card__copy"><span>{service.number}</span><h3>{service.title}</h3><p>{service.description}</p><a href="#quote">Discuss your surface <span aria-hidden="true">↗</span></a></div>
+            </article>
           ))}
         </div>
       </div>

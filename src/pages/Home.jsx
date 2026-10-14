@@ -5,7 +5,6 @@ import FloatingActions from "@/components/landing/FloatingActions";
 import Footer from "@/components/landing/Footer";
 import HeroSection from "@/components/landing/HeroSection";
 import Navbar from "@/components/landing/Navbar";
-import ProjectStorySection from "@/components/landing/ProjectStorySection";
 import QuoteSection from "@/components/landing/QuoteSection";
 import ServiceAreasSection from "@/components/landing/ServiceAreasSection";
 import ServicesSection from "@/components/landing/ServicesSection";
@@ -18,7 +17,6 @@ export default function Home() {
       <Navbar />
       <main id="main-content">
         <HeroSection />
-        <ProjectStorySection />
         <ServicesSection />
         <AboutSection />
         <ServiceAreasSection />
