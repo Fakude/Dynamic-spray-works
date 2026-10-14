@@ -4,11 +4,10 @@ import { Menu, X, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Project", href: "#work" },
   { label: "Services", href: "#services" },
+  { label: "Process", href: "#about" },
   { label: "Areas", href: "#areas" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -25,7 +24,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-background/95 backdrop-blur-md shadow-lg shadow-black/20"
+          ? "border-b border-border bg-background/92 backdrop-blur-md"
           : "bg-transparent"
       }`}
     >
@@ -42,8 +41,8 @@ export default function Navbar() {
               <p className="font-heading font-bold text-foreground text-sm leading-tight">
                 Dynamic Spray Works
               </p>
-              <p className="text-[10px] text-muted-foreground tracking-wider">
-                (Pty) Ltd
+              <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                Airless spray coating
               </p>
             </div>
           </a>
@@ -71,7 +70,7 @@ export default function Navbar() {
               +(27) 67 624 4130
             </a>
             <a href="#quote">
-              <Button className="bg-primary text-primary-foreground font-heading font-semibold rounded-full px-6">
+              <Button className="rounded-none bg-primary px-6 font-heading font-semibold text-primary-foreground">
                 Free Quote
               </Button>
             </a>
@@ -79,8 +78,11 @@ export default function Navbar() {
 
           {/* Mobile Toggle */}
           <button
-            className="md:hidden p-2 text-foreground"
+            className="min-h-11 min-w-11 p-2 text-foreground md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -94,6 +96,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            id="mobile-navigation"
             className="md:hidden bg-background/98 backdrop-blur-lg border-t border-border"
           >
             <div className="px-4 py-6 space-y-4">
@@ -108,7 +111,7 @@ export default function Navbar() {
                 </a>
               ))}
               <a href="#quote" onClick={() => setMobileOpen(false)}>
-                <Button className="w-full bg-primary text-primary-foreground font-heading font-semibold rounded-full mt-2">
+                <Button className="mt-2 w-full rounded-none bg-primary font-heading font-semibold text-primary-foreground">
                   Get Free Quote
                 </Button>
               </a>

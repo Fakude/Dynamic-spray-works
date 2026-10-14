@@ -24,8 +24,6 @@ const BENEFITS = [
 export default function QuoteSection() {
   return (
     <section id="quote" className="relative py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
-
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-start gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <motion.div
@@ -34,7 +32,7 @@ export default function QuoteSection() {
             viewport={{ once: true }}
             className="lg:sticky lg:top-28"
           >
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2">
+            <div className="mb-5 inline-flex items-center gap-2 border-l-2 border-primary pl-3">
               <MessageCircle className="h-4 w-4 text-primary" />
               <span className="text-xs font-semibold uppercase tracking-widest text-primary">
                 WhatsApp quotation
@@ -50,8 +48,8 @@ export default function QuoteSection() {
 
             <div className="space-y-4">
               {BENEFITS.map(({ icon: Icon, title, description }) => (
-                <div key={title} className="flex gap-4 rounded-2xl border border-border/70 bg-card/50 p-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                <div key={title} className="flex gap-4 border-t border-border py-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-border">
                     <Icon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
@@ -67,7 +65,7 @@ export default function QuoteSection() {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="rounded-3xl border border-border bg-card p-6 shadow-2xl shadow-black/20 sm:p-10"
+            className="border border-border bg-card p-6 sm:p-10"
           >
             <QuoteForm />
           </motion.div>

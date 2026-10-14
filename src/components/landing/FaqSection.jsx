@@ -18,9 +18,9 @@ export default function FaqSection() {
           <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">Helpful answers</p>
           <h2 className="font-heading text-3xl font-black text-foreground sm:text-4xl">Frequently asked questions</h2>
         </div>
-        <div className="space-y-3">
+        <div className="border-b border-border">
           {FAQS.map(([question, answer]) => (
-            <details key={question} className="group rounded-2xl border border-border bg-background p-5 open:border-primary/40">
+            <details key={question} className="group border-t border-border bg-background p-5 open:border-primary/40">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-heading font-bold text-foreground">
                 {question}<ChevronDown className="h-5 w-5 shrink-0 text-primary transition group-open:rotate-180" />
               </summary>

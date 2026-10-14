@@ -1,86 +1,49 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
-
-const HERO_IMG =
-  "https://media.base44.com/images/public/6a0a933d536cec25447f18b5/fc65910a2_generated_62d03ac4.png";
+import { ArrowDown, ArrowRight } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 
 export default function HeroSection() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Image */}
+    <section id="home" className="relative flex min-h-[100svh] items-end overflow-hidden">
       <div className="absolute inset-0">
         <img
-          src={HERO_IMG}
-          alt="Professional airless spray painting"
-          className="w-full h-full object-cover"
+          src="/images/projects/house-front-dusk.jpg"
+          alt="Freshly coated modern house exterior at dusk"
+          fetchPriority="high"
+          className="h-full w-full object-cover object-[58%_center]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/60" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,hsl(var(--background)/.96)_0%,hsl(var(--background)/.72)_38%,hsl(var(--background)/.12)_72%),linear-gradient(0deg,hsl(var(--background)/.88)_0%,transparent_50%)]" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 sm:py-40">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-12 pt-32 sm:px-8 sm:pb-16 lg:px-12 lg:pb-20">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-2xl"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-4xl"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-xs font-body font-medium text-primary tracking-wide uppercase">
-              Professional Airless Spraying
-            </span>
-          </div>
-
-          <h1 className="font-heading font-black text-4xl sm:text-5xl md:text-7xl leading-[1.05] mb-6">
-            <span className="text-primary">Dynamic</span>
-            <br />
-            <span className="text-foreground">Spray Works</span>
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-primary sm:text-sm">
+            Professional airless spray coating · South Africa
+          </p>
+          <h1 className="max-w-4xl font-heading text-[clamp(3.6rem,10vw,8.4rem)] font-bold uppercase leading-[0.79] tracking-[-0.035em] text-foreground">
+            Make your
+            <span className="block text-primary">house a home.</span>
           </h1>
-
-          <p className="text-lg sm:text-xl font-body text-muted-foreground max-w-lg mb-4">
-            Let us make your house a home.
+          <p className="mt-7 max-w-xl text-base leading-relaxed text-white/75 sm:text-lg">
+            Careful preparation and controlled spray application for roofs, walls and
+            paved surfaces—finished with an eye for the whole property.
           </p>
-
-          <p className="text-sm sm:text-base font-body text-muted-foreground/70 max-w-md mb-10">
-            Expert pavement, roof &amp; wall painting using cutting-edge airless spraying
-            technology. Serving South Africa with quality that lasts.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a href="#quote">
-              <Button
-                size="lg"
-                className="bg-primary text-primary-foreground font-heading font-bold rounded-full px-8 text-base gap-2 hover:scale-105 transition-transform"
-              >
-                Get a Free Quote
-                <ArrowRight className="w-5 h-5" />
-              </Button>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a href="#quote" className="primary-cta">
+              Request a free quote <ArrowRight className="h-4 w-4" />
             </a>
-            <a href="#services">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-border text-foreground font-heading font-semibold rounded-full px-8 text-base hover:bg-secondary"
-              >
-                Our Services
-              </Button>
+            <a href="#work" className="secondary-cta">
+              View the project <ArrowDown className="h-4 w-4" />
             </a>
           </div>
         </motion.div>
-      </div>
-
-      {/* Decorative bottom curve */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 80" fill="none" className="w-full">
-          <path
-            d="M0 80h1440V30C1200 70 960 0 720 40S240 90 0 30v50z"
-            fill="hsl(var(--background))"
-          />
-        </svg>
       </div>
     </section>
   );

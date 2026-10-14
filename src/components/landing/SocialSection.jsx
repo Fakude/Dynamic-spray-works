@@ -19,12 +19,12 @@ export default function SocialSection() {
   return (
     <section id="social" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="md:col-span-1"><p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">Follow & share</p><h2 className="font-heading text-3xl font-black text-foreground">See the work. Share the result.</h2></div>
-          <a href="https://www.tiktok.com/@coatingsolutions" target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("social_click", { network: "tiktok" })} className="group rounded-2xl border border-border bg-card p-6 transition hover:border-primary/50">
+        <div className="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
+          <div className="bg-card p-6 md:col-span-1"><p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">Follow & share</p><h2 className="font-heading text-3xl font-black uppercase leading-none text-foreground">See the work. Share the result.</h2></div>
+          <a href="https://www.tiktok.com/@coatingsolutions" target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("social_click", { network: "tiktok" })} className="group bg-card p-6 transition-colors hover:bg-secondary">
             <ExternalLink className="mb-8 h-6 w-6 text-primary" /><h3 className="font-heading font-bold text-foreground">Follow on TikTok</h3><p className="mt-2 text-sm text-muted-foreground">Watch project and spray-painting content from @coatingsolutions.</p>
           </a>
-          <button type="button" onClick={shareSite} className="group rounded-2xl border border-border bg-card p-6 text-left transition hover:border-primary/50">
+          <button type="button" onClick={shareSite} className="group bg-card p-6 text-left transition-colors hover:bg-secondary">
             <Share2 className="mb-8 h-6 w-6 text-primary" /><h3 className="font-heading font-bold text-foreground">Share our website</h3><p className="mt-2 text-sm text-muted-foreground">Send Dynamic Spray Works to someone planning a painting project.</p><MessageCircle className="mt-4 h-4 w-4 text-muted-foreground" />
           </button>
         </div>
