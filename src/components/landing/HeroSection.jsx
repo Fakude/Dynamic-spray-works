@@ -7,6 +7,10 @@ import useSiteMotion, { enableSiteMotion } from "@/hooks/useSiteMotion";
 const FRAME_COUNT = 241;
 const INITIAL_IMAGE = "/images/projects/house-front-dusk.jpg";
 const frameUrl = (index) => `/images/hero-sequence/ezgif-frame-${String(index + 1).padStart(3, "0")}.jpg`;
+const smoothstep = (start, end, value) => {
+  const t = gsap.utils.clamp(0, 1, (value - start) / (end - start));
+  return t * t * (3 - 2 * t);
+};
 
 function drawCover(canvas, image) {
   if (!canvas || !image?.naturalWidth) return;
@@ -99,11 +103,18 @@ export default function HeroSection() {
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         renderFrame(Math.round(self.progress * (FRAME_COUNT - 1)));
-        gsap.set(canvasRef.current?.previousElementSibling, { opacity: self.progress < 0.002 ? 1 : 0 });
+        // Crossfade the still into the first drawn frame instead of switching
+        // layers on a single scroll tick. This removes the visual jump at the
+        // start of the sequence on fast wheels/touchpads.
+        const handoff = smoothstep(0, 0.1, self.progress);
+        gsap.set(section.querySelector(".sequence-hero__initial"), { opacity: 1 - handoff });
+        gsap.set(canvasRef.current, { opacity: handoff });
         // Let the sequence breathe first. The paper-toned end state and copy
         // arrive only in the final fifth, so the project remains the focus.
-        const endProgress = gsap.utils.clamp(0, 1, (self.progress - 0.78) / 0.22);
-        const visibility = gsap.utils.clamp(0, 1, (self.progress - 0.72) / 0.2);
+        const endProgress = smoothstep(0.78, 0.98, self.progress);
+        const openingFade = smoothstep(0.04, 0.2, self.progress);
+        const endReveal = smoothstep(0.82, 0.98, self.progress);
+        const visibility = Math.max(1 - openingFade, endReveal);
         gsap.set(copyRef.current, { opacity: visibility, y: 28 * (1 - visibility) });
         gsap.set(shadeRef.current, { opacity: endProgress });
         copyRef.current.style.pointerEvents = visibility < 0.1 ? "none" : "auto";

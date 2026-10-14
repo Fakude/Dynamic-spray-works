@@ -117,7 +117,7 @@ body.is-sequence-loading {
 .sequence-hero__canvas,
 .sequence-hero__initial { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
 .sequence-hero__initial { z-index: 1; transition: opacity 120ms linear; }
-.sequence-hero__canvas { z-index: 0; }
+.sequence-hero__canvas { z-index: 0; opacity: 0; }
 .sequence-hero__shade { position: absolute; inset: 0; opacity: 0; background: linear-gradient(90deg, hsl(var(--background) / .98) 0%, hsl(var(--background) / .9) 36%, hsl(var(--background) / .15) 72%); }
 .sequence-hero__copy { position: absolute; z-index: 2; left: max(1.25rem, calc((100vw - 80rem) / 2 + 3rem)); bottom: clamp(3rem, 8vh, 6rem); width: min(54rem, calc(100vw - 2.5rem)); }
 .sequence-hero__cue { position: absolute; z-index: 3; right: clamp(1.25rem, 4vw, 4rem); bottom: 2rem; display: flex; align-items: center; gap: .85rem; padding: .65rem .85rem; background: hsl(var(--background) / .92); font-size: .67rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: hsl(var(--foreground)); }
