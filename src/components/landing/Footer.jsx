@@ -9,11 +9,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <span className="font-heading font-black text-primary-foreground text-lg">
-                  CS
-                </span>
-              </div>
+              <img
+                src="/images/coating-solutions-logo.jpg"
+                alt="Coating Solutions company logo"
+                className="h-16 w-16 shrink-0 rounded-md border border-border bg-white object-contain p-0.5"
+              />
               <div>
                 <p className="font-heading font-bold text-foreground text-sm leading-tight">
                   Coating Solutions

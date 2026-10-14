@@ -32,11 +32,11 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
           <a href="#home" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-              <span className="font-heading font-black text-primary-foreground text-lg">
-                CS
-              </span>
-            </div>
+            <img
+              src="/images/coating-solutions-logo.jpg"
+              alt="Coating Solutions company logo"
+              className="h-12 w-12 shrink-0 rounded-md border border-border bg-white object-contain p-0.5"
+            />
             <div className="hidden sm:block">
               <p className="font-heading font-bold text-foreground text-sm leading-tight">
                 Coating Solutions
