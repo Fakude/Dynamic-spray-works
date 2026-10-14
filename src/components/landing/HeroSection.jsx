@@ -16,7 +16,11 @@ function drawCover(canvas, image) {
   canvas.width = Math.round(rect.width * dpr);
   canvas.height = Math.round(rect.height * dpr);
   context.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const scale = Math.min(rect.width / image.naturalWidth, rect.height / image.naturalHeight);
+  // On narrow screens the landscape source needs to fill the portrait stage;
+  // on wider screens contain preserves the full property without distortion.
+  const scale = rect.width < 768
+    ? Math.max(rect.width / image.naturalWidth, rect.height / image.naturalHeight)
+    : Math.min(rect.width / image.naturalWidth, rect.height / image.naturalHeight);
   const width = image.naturalWidth * scale;
   const height = image.naturalHeight * scale;
   context.clearRect(0, 0, rect.width, rect.height);
@@ -96,11 +100,16 @@ export default function HeroSection() {
       onUpdate: (self) => {
         renderFrame(Math.round(self.progress * (FRAME_COUNT - 1)));
         gsap.set(canvasRef.current?.previousElementSibling, { opacity: self.progress < 0.002 ? 1 : 0 });
-        const visibility = gsap.utils.clamp(0, 1, 1 - self.progress * 4.5);
-        gsap.set(copyRef.current, { opacity: visibility, y: -28 * (1 - visibility) });
-        gsap.set(shadeRef.current, { opacity: visibility });
+        // Let the sequence breathe first. The paper-toned end state and copy
+        // arrive only in the final fifth, so the project remains the focus.
+        const endProgress = gsap.utils.clamp(0, 1, (self.progress - 0.78) / 0.22);
+        const visibility = gsap.utils.clamp(0, 1, (self.progress - 0.72) / 0.2);
+        gsap.set(copyRef.current, { opacity: visibility, y: 28 * (1 - visibility) });
+        gsap.set(shadeRef.current, { opacity: endProgress });
         copyRef.current.style.pointerEvents = visibility < 0.1 ? "none" : "auto";
         copyRef.current.inert = visibility < 0.1;
+        const cue = section.querySelector(".sequence-hero__cue");
+        if (cue) gsap.set(cue, { opacity: gsap.utils.clamp(0, 1, (self.progress - 0.84) / 0.12) });
       },
       onRefresh: (self) => {
         const rect = section.getBoundingClientRect();
