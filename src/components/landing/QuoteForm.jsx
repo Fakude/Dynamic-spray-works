@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Check,
   CheckCircle2,
+  Mail,
   MessageCircle,
   ShieldCheck,
 } from "lucide-react";
@@ -30,6 +31,7 @@ const SERVICES = [
   { value: "other", label: "Other" },
 ];
 const WHATSAPP_NUMBER = "27676244130";
+const QUOTE_EMAIL = "nduminkosi20@gmail.com";
 
 const initialForm = {
   service: "",
@@ -49,7 +51,7 @@ export default function QuoteForm() {
   const [form, setForm] = useState(initialForm);
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState({});
-  const [whatsAppUrl, setWhatsAppUrl] = useState("");
+  const [handoff, setHandoff] = useState(null);
 
   const handleChange = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -83,14 +85,8 @@ export default function QuoteForm() {
     if (validateStep()) setStep((current) => Math.min(current + 1, STEPS.length - 1));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (step < STEPS.length - 1) {
-      goForward();
-      return;
-    }
-
-    const message = [
+  const buildQuoteMessage = () =>
+    [
       "Hello Coating Solutions, I would like a free quotation.",
       "",
       `Service: ${serviceLabel(form.service)}`,
@@ -103,14 +99,31 @@ export default function QuoteForm() {
     ]
       .filter(Boolean)
       .join("\n");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (step < STEPS.length - 1) {
+      goForward();
+      return;
+    }
+
+    const message = buildQuoteMessage();
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-    setWhatsAppUrl(url);
+    setHandoff({ channel: "WhatsApp", url });
     trackEvent("quote_whatsapp_handoff", { service: form.service });
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  if (whatsAppUrl) {
+  const handleEmail = () => {
+    const subject = `Quotation request — ${serviceLabel(form.service)} — ${form.location.trim()}`;
+    const url = `mailto:${QUOTE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildQuoteMessage())}`;
+    setHandoff({ channel: "email", url });
+    trackEvent("quote_email_handoff", { service: form.service });
+    window.location.href = url;
+  };
+
+  if (handoff) {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
@@ -125,16 +138,16 @@ export default function QuoteForm() {
           Request prepared
         </p>
         <h3 className="mb-3 font-heading text-2xl font-bold text-foreground">
-          Continue in WhatsApp
+          Continue by {handoff.channel}
         </h3>
         <p className="mx-auto mb-7 max-w-md font-body text-sm leading-relaxed text-muted-foreground">
-          Your details have not been stored on this website. Send the prepared WhatsApp
-          message to deliver your request to our team.
+          Your details have not been stored on this website. Send the prepared {handoff.channel}
+          {handoff.channel === "email" ? ` to ${QUOTE_EMAIL}` : " message"} to deliver your request to our team.
         </p>
-        <a href={whatsAppUrl} target="_blank" rel="noopener noreferrer">
+        <a href={handoff.url} target={handoff.channel === "WhatsApp" ? "_blank" : undefined} rel="noopener noreferrer">
           <Button className="h-12 rounded-full px-7 font-heading font-bold">
-            <MessageCircle className="h-5 w-5" />
-            Open WhatsApp
+            {handoff.channel === "WhatsApp" ? <MessageCircle className="h-5 w-5" /> : <Mail className="h-5 w-5" />}
+            Open {handoff.channel}
           </Button>
         </a>
         <button
@@ -143,7 +156,7 @@ export default function QuoteForm() {
           onClick={() => {
             setForm(initialForm);
             setStep(0);
-            setWhatsAppUrl("");
+            setHandoff(null);
           }}
         >
           Start another request
@@ -308,8 +321,8 @@ export default function QuoteForm() {
                   className="mt-1 h-4 w-4 accent-primary"
                 />
                 <span className="text-xs leading-relaxed text-muted-foreground">
-                  I agree to share these details with Coating Solutions on WhatsApp for
-                  the purpose of preparing and following up on this quotation.
+                  I agree to share these details with Coating Solutions by WhatsApp or
+                  email for the purpose of preparing and following up on this quotation.
                 </span>
               </label>
               {errors.consent && <p className="text-xs text-destructive">{errors.consent}</p>}
@@ -374,27 +387,29 @@ export default function QuoteForm() {
             Back
           </Button>
         )}
-        <Button
-          type="submit"
-          size="lg"
-          className="h-12 flex-1 rounded-full font-heading font-bold"
-        >
-          {step === STEPS.length - 1 ? (
-            <>
+        {step === STEPS.length - 1 ? (
+          <div className="grid flex-1 gap-3 sm:grid-cols-2">
+            <Button type="submit" size="lg" className="h-12 rounded-full font-heading font-bold">
               <MessageCircle className="h-5 w-5" />
-              Continue to WhatsApp
-            </>
-          ) : (
+              Send by WhatsApp
+            </Button>
+            <Button type="button" variant="outline" size="lg" className="h-12 rounded-full font-heading font-bold" onClick={handleEmail}>
+              <Mail className="h-5 w-5" />
+              Send by email
+            </Button>
+          </div>
+        ) : (
+          <Button type="submit" size="lg" className="h-12 flex-1 rounded-full font-heading font-bold">
             <>
               Continue
               <ArrowRight className="h-5 w-5" />
             </>
-          )}
-        </Button>
+          </Button>
+        )}
       </div>
 
       <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">
-        Your information stays in this browser until you choose to send it via WhatsApp.
+        Your information stays in this browser until you choose WhatsApp or email.
       </p>
     </form>
   );

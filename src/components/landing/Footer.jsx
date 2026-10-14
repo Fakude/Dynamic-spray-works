@@ -1,5 +1,5 @@
 import React from "react";
-import { Cookie, ExternalLink, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Cookie, ExternalLink, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -66,6 +66,13 @@ export default function Footer() {
               >
                 <Phone className="w-4 h-4 text-primary shrink-0" />
                 +27 67 624 4130
+              </a>
+              <a
+                href="mailto:nduminkosi20@gmail.com"
+                className="flex items-center gap-3 text-sm font-body text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Mail className="w-4 h-4 text-primary shrink-0" />
+                nduminkosi20@gmail.com
               </a>
               <a
                 href="https://wa.me/27676244130"

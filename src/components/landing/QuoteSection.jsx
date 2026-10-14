@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Clock3, FileCheck2, LockKeyhole, MessageCircle } from "lucide-react";
+import { Clock3, FileCheck2, LockKeyhole, Mail } from "lucide-react";
 import QuoteForm from "./QuoteForm";
 
 const BENEFITS = [
@@ -34,9 +34,9 @@ export default function QuoteSection() {
             className="lg:sticky lg:top-28"
           >
             <div className="mb-5 inline-flex items-center gap-2 border-l-2 border-primary pl-3">
-              <MessageCircle className="h-4 w-4 text-primary" />
+              <Mail className="h-4 w-4 text-primary" />
               <span className="text-xs font-semibold uppercase tracking-widest text-primary">
-                WhatsApp quotation
+                WhatsApp or email quotation
               </span>
             </div>
             <h2 className="mb-6 font-heading text-3xl font-black text-foreground sm:text-4xl md:text-5xl">
@@ -44,7 +44,8 @@ export default function QuoteSection() {
             </h2>
             <p className="mb-9 max-w-lg font-body text-lg leading-relaxed text-muted-foreground">
               Add your project, contact, and location details; review everything; then
-              send the prepared request directly to Coating Solutions on WhatsApp.
+              send the prepared request directly to Coating Solutions on WhatsApp or at
+              {" "}<a href="mailto:nduminkosi20@gmail.com" className="font-semibold text-primary hover:underline">nduminkosi20@gmail.com</a>.
             </p>
 
             <div className="space-y-4">
