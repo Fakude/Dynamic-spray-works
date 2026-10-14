@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
 
-const QUERY = "(prefers-reduced-motion: reduce)";
-
 export function enableSiteMotion() {
   window.dispatchEvent(new Event("dsw-enable-motion"));
 }
 
 export default function useSiteMotion() {
-  const [reduced, setReduced] = useState(() => window.matchMedia(QUERY).matches);
+  // The site experience is scroll-led by default. Keep the explicit motion
+  // event hook so a future accessibility control can opt out without making
+  // the browser's global preference hide the primary sequence for everyone.
+  const [reduced, setReduced] = useState(false);
   useEffect(() => {
-    const media = window.matchMedia(QUERY);
-    const update = () => setReduced(media.matches);
     const enable = () => setReduced(false);
-    media.addEventListener("change", update);
     window.addEventListener("dsw-enable-motion", enable);
     return () => {
-      media.removeEventListener("change", update);
       window.removeEventListener("dsw-enable-motion", enable);
     };
   }, []);
