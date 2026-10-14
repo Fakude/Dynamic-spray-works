@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useSiteMotion from "@/hooks/useSiteMotion";
@@ -13,14 +13,18 @@ export default function ServicesSection() {
   const sectionRef = useRef(null);
   const reducedMotion = useSiteMotion();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (reducedMotion) return undefined;
     gsap.registerPlugin(ScrollTrigger);
     const cards = Array.from(sectionRef.current.querySelectorAll("[data-offer-card]"));
-    const animations = cards.map((card, index) => {
+    const context = gsap.context(() => cards.forEach((card, index) => {
       const image = card.querySelector("[data-offer-image]");
       const direction = index % 2 === 0 ? -1 : 1;
-      return gsap.fromTo(image, { xPercent: direction * 38, opacity: 0.15, rotate: direction * -2 }, {
+      // Set both pixel and percentage offsets: refresh must never retain an
+      // old pixel translation alongside the new percentage translation.
+      gsap.fromTo(image, { x: 0, y: 0, xPercent: direction * 12, opacity: 1, rotate: 0 }, {
+        x: 0,
+        y: 0,
         xPercent: 0,
         opacity: 1,
         rotate: 0,
@@ -28,8 +32,8 @@ export default function ServicesSection() {
         scrollTrigger: {
           id: `offer-${index + 1}`,
           trigger: card,
-          start: "top 88%",
-          end: "top 44%",
+          start: "top 95%",
+          end: "top 75%",
           scrub: true,
           invalidateOnRefresh: true,
           onRefresh: (self) => {
@@ -42,21 +46,25 @@ export default function ServicesSection() {
           },
         },
       });
-    });
+    }), sectionRef);
     let refreshFrame = 0;
     const observer = new ResizeObserver(() => {
       cancelAnimationFrame(refreshFrame);
       refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
     });
     observer.observe(sectionRef.current);
+    const images = cards.map((card) => card.querySelector("img"));
+    const refresh = () => {
+      cancelAnimationFrame(refreshFrame);
+      refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+    images.forEach((image) => image.addEventListener("load", refresh));
     ScrollTrigger.refresh();
     return () => {
       observer.disconnect();
       cancelAnimationFrame(refreshFrame);
-      animations.forEach((animation) => {
-        animation.scrollTrigger?.kill();
-        animation.revert();
-      });
+      images.forEach((image) => image.removeEventListener("load", refresh));
+      context.revert();
     };
   }, [reducedMotion]);
 
