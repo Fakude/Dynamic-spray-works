@@ -1,18 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import useSiteMotion from "@/hooks/useSiteMotion";
 
 const SERVICES = [
-  { number: "01", title: "Exterior Painting", description: "Even, controlled coverage across walls, trims and architectural details.", image: "/images/service-cutouts/exterior-house.png", watermark: "EXTERIOR" },
+  { number: "01", title: "Roof & Exterior Painting", description: "Roof coating systems chosen for the surface and exposure, with controlled coverage across walls, trims and architectural details.", image: "/images/service-cutouts/exterior-house.png", watermark: "EXTERIOR" },
   { number: "02", title: "Pavement Painting", description: "Driveways, walkways and pool surrounds prepared and coated as one considered surface.", image: "/images/service-cutouts/pavement-pool.png", watermark: "PAVING" },
   { number: "03", title: "Boundary Walls", description: "Clean coverage across long runs, piers, corners and detailed edges.", image: "/images/service-cutouts/wall-house.png", watermark: "WALLS" },
 ];
 
 export default function ServicesSection() {
   const sectionRef = useRef(null);
+  const reducedMotion = useSiteMotion();
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    if (reducedMotion) return undefined;
     gsap.registerPlugin(ScrollTrigger);
     const cards = Array.from(sectionRef.current.querySelectorAll("[data-offer-card]"));
     const animations = cards.map((card, index) => {
@@ -28,7 +30,7 @@ export default function ServicesSection() {
           trigger: card,
           start: "top 88%",
           end: "top 44%",
-          scrub: 0.65,
+          scrub: true,
           invalidateOnRefresh: true,
           onRefresh: (self) => {
             const rect = card.getBoundingClientRect();
@@ -41,16 +43,29 @@ export default function ServicesSection() {
         },
       });
     });
+    let refreshFrame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(refreshFrame);
+      refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
+    observer.observe(sectionRef.current);
     ScrollTrigger.refresh();
-    return () => animations.forEach((animation) => animation.scrollTrigger?.kill());
-  }, []);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(refreshFrame);
+      animations.forEach((animation) => {
+        animation.scrollTrigger?.kill();
+        animation.revert();
+      });
+    };
+  }, [reducedMotion]);
 
   return (
     <section id="services" ref={sectionRef} className="offers-section">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         <div className="offers-heading">
           <div><p className="section-kicker">What we coat</p><h2>Built for the surface.<br />Finished for the property.</h2></div>
-          <p>Every quote starts with the real condition of the surface: access, preparation, coating system and the standard the project needs.</p>
+          <p>Every quote starts with the real condition of the surface. Cleaning, masking and site preparation come before the coating, with access and the right coating system assessed for each job.</p>
         </div>
         <div className="offers-list">
           {SERVICES.map((service, index) => (

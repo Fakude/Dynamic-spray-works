@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import useSiteMotion, { enableSiteMotion } from "@/hooks/useSiteMotion";
 
 const FRAME_COUNT = 241;
 const frameUrl = (index) => `/images/hero-sequence/ezgif-frame-${String(index + 1).padStart(3, "0")}.jpg`;
@@ -14,31 +15,25 @@ function drawCover(canvas, image) {
   canvas.width = Math.round(rect.width * dpr);
   canvas.height = Math.round(rect.height * dpr);
   context.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const scale = Math.max(rect.width / image.naturalWidth, rect.height / image.naturalHeight);
+  const scale = Math.min(rect.width / image.naturalWidth, rect.height / image.naturalHeight);
   const width = image.naturalWidth * scale;
   const height = image.naturalHeight * scale;
   context.clearRect(0, 0, rect.width, rect.height);
-  context.drawImage(image, (rect.width - width) / 2, (rect.height - height) / 2, width, height);
+  const y = rect.width < 768 ? 64 : (rect.height - height) / 2;
+  context.drawImage(image, (rect.width - width) / 2, y, width, height);
 }
 
 export default function HeroSection() {
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
   const copyRef = useRef(null);
+  const shadeRef = useRef(null);
   const imagesRef = useRef([]);
   const frameRef = useRef(-1);
   const rafRef = useRef(0);
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReducedMotion(media.matches);
-    sync();
-    media.addEventListener?.("change", sync);
-    return () => media.removeEventListener?.("change", sync);
-  }, []);
+  const reducedMotion = useSiteMotion();
 
   useEffect(() => {
     if (reducedMotion) {
@@ -46,6 +41,9 @@ export default function HeroSection() {
       setReady(true);
       return undefined;
     }
+    setReady(false);
+    setProgress(0);
+    frameRef.current = -1;
     let cancelled = false;
     let settled = 0;
     const images = Array.from({ length: FRAME_COUNT }, (_, index) => {
@@ -78,9 +76,11 @@ export default function HeroSection() {
     if (reducedMotion) return undefined;
     gsap.registerPlugin(ScrollTrigger);
     const section = sectionRef.current;
+    frameRef.current = -1;
     const renderFrame = (index) => {
       if (index === frameRef.current) return;
       frameRef.current = index;
+      canvasRef.current.dataset.frame = String(index + 1);
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => drawCover(canvasRef.current, imagesRef.current[index]));
     };
@@ -96,6 +96,9 @@ export default function HeroSection() {
         renderFrame(Math.round(self.progress * (FRAME_COUNT - 1)));
         const visibility = gsap.utils.clamp(0, 1, 1 - self.progress * 4.5);
         gsap.set(copyRef.current, { opacity: visibility, y: -28 * (1 - visibility) });
+        gsap.set(shadeRef.current, { opacity: visibility });
+        copyRef.current.style.pointerEvents = visibility < 0.1 ? "none" : "auto";
+        copyRef.current.inert = visibility < 0.1;
       },
       onRefresh: (self) => {
         const rect = section.getBoundingClientRect();
@@ -106,13 +109,26 @@ export default function HeroSection() {
         section.dataset.documentTop = String(documentTop);
       },
     });
-    const resize = () => drawCover(canvasRef.current, imagesRef.current[frameRef.current]);
+    let resizeFrame = 0;
+    const resize = () => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(() => {
+        drawCover(canvasRef.current, imagesRef.current[frameRef.current]);
+        ScrollTrigger.refresh();
+      });
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(section);
     window.addEventListener("resize", resize);
     ScrollTrigger.refresh();
     return () => {
       trigger.kill();
       cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(resizeFrame);
+      observer.disconnect();
       window.removeEventListener("resize", resize);
+      gsap.set([copyRef.current, shadeRef.current], { clearProps: "all" });
+      if (copyRef.current) copyRef.current.inert = false;
     };
   }, [ready, reducedMotion]);
 
@@ -122,12 +138,12 @@ export default function HeroSection() {
       <section id="home" ref={sectionRef} className={`sequence-hero ${reducedMotion ? "sequence-hero--static" : ""}`}>
         <div className="sequence-hero__stage">
           {reducedMotion ? <img src={frameUrl(0)} alt="Freshly coated modern home exterior" className="sequence-hero__fallback" /> : <canvas ref={canvasRef} className="sequence-hero__canvas" role="img" aria-label="A coating project moves from finished home to spray application and back as the page scrolls" />}
-          <div className="sequence-hero__shade" />
+          <div ref={shadeRef} className="sequence-hero__shade" />
           <div ref={copyRef} className="sequence-hero__copy">
             <p className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-primary sm:text-sm">Professional airless spray coating · South Africa</p>
             <h1 className="max-w-4xl font-heading text-[clamp(3.6rem,10vw,8.4rem)] font-bold uppercase leading-[0.79] tracking-[-0.035em] text-foreground">Make your <span className="block text-primary">house a home.</span></h1>
-            <p className="mt-7 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">Controlled application for roofs, walls and paving—built on careful preparation and a finish that holds the whole property together.</p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"><a href="#quote" className="primary-cta">Request a free quote <ArrowRight className="h-4 w-4" /></a><a href="#services" className="secondary-cta">Scroll through the process <ArrowDown className="h-4 w-4" /></a></div>
+            <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">Controlled application for roofs, walls and paving—built on careful preparation and a finish that holds the whole property together.</p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"><a href="#quote" className="primary-cta">Request a free quote <ArrowRight className="h-4 w-4" /></a>{reducedMotion ? <button type="button" onClick={enableSiteMotion} className="secondary-cta">Enable scroll animation <ArrowDown className="h-4 w-4" /></button> : <a href="#services" className="secondary-cta">Explore our services <ArrowDown className="h-4 w-4" /></a>}</div>
           </div>
           {!reducedMotion && <div className="sequence-hero__cue" aria-hidden="true"><span>Scroll to coat</span><i /></div>}
         </div>

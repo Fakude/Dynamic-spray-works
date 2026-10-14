@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Clock3, FileCheck2, LockKeyhole, MessageCircle } from "lucide-react";
 import QuoteForm from "./QuoteForm";
 
@@ -22,12 +22,13 @@ const BENEFITS = [
 ];
 
 export default function QuoteSection() {
+  const reducedMotion = useReducedMotion();
   return (
     <section id="quote" className="relative py-24 sm:py-32">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-start gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={reducedMotion ? false : { opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             className="lg:sticky lg:top-28"
@@ -62,7 +63,7 @@ export default function QuoteSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={reducedMotion ? false : { opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             className="border border-border bg-card p-6 sm:p-10"

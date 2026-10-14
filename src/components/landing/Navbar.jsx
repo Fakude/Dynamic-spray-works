@@ -4,7 +4,7 @@ import { Menu, X, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { label: "Project", href: "#work" },
+  { label: "Project", href: "#home" },
   { label: "Services", href: "#services" },
   { label: "Process", href: "#about" },
   { label: "Areas", href: "#areas" },
@@ -24,8 +24,8 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-border bg-background/92 backdrop-blur-md"
-          : "bg-transparent"
+          ? "border-b border-border bg-background/95 backdrop-blur-md"
+          : "border-b border-border/60 bg-background/95"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -97,7 +97,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             id="mobile-navigation"
-            className="md:hidden bg-background/98 backdrop-blur-lg border-t border-border"
+            className="md:hidden bg-background/95 backdrop-blur-lg border-t border-border"
           >
             <div className="px-4 py-6 space-y-4">
               {navLinks.map((link) => (
