@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MessageCircle, Phone } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 
@@ -6,9 +6,18 @@ const PHONE = "27676244130";
 const message = encodeURIComponent("Hello Dynamic Spray Works, I would like a free quotation.");
 
 export default function FloatingActions() {
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const update = () => setHasScrolled(window.scrollY > 80);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+
   return (
     <div className="fixed bottom-4 right-4 z-40 flex flex-col gap-3" aria-label="Quick contact actions">
-      <a
+      {hasScrolled && <a
         href={`https://wa.me/${PHONE}?text=${message}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -18,7 +27,7 @@ export default function FloatingActions() {
       >
         <MessageCircle className="h-5 w-5" />
         <span className="hidden sm:inline">WhatsApp quote</span>
-      </a>
+      </a>}
       <a
         href={`tel:+${PHONE}`}
         onClick={() => trackEvent("phone_click", { placement: "floating_action" })}

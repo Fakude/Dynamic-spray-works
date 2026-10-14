@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useSiteMotion, { enableSiteMotion } from "@/hooks/useSiteMotion";
 
 const FRAME_COUNT = 241;
+const INITIAL_IMAGE = "/images/projects/house-front-dusk.jpg";
 const frameUrl = (index) => `/images/hero-sequence/ezgif-frame-${String(index + 1).padStart(3, "0")}.jpg`;
 
 function drawCover(canvas, image) {
@@ -94,6 +95,7 @@ export default function HeroSection() {
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         renderFrame(Math.round(self.progress * (FRAME_COUNT - 1)));
+        gsap.set(canvasRef.current?.previousElementSibling, { opacity: self.progress < 0.002 ? 1 : 0 });
         const visibility = gsap.utils.clamp(0, 1, 1 - self.progress * 4.5);
         gsap.set(copyRef.current, { opacity: visibility, y: -28 * (1 - visibility) });
         gsap.set(shadeRef.current, { opacity: visibility });
@@ -137,7 +139,8 @@ export default function HeroSection() {
       {!ready && <div className="sequence-loader" role="status" aria-live="polite"><div className="sequence-loader__mark">DSW</div><div className="sequence-loader__readout"><span>Preparing the finish</span><strong>{progress}%</strong></div><div className="sequence-loader__track"><span style={{ width: `${progress}%` }} /></div></div>}
       <section id="home" ref={sectionRef} className={`sequence-hero ${reducedMotion ? "sequence-hero--static" : ""}`}>
         <div className="sequence-hero__stage">
-          {reducedMotion ? <img src={frameUrl(0)} alt="Freshly coated modern home exterior" className="sequence-hero__fallback" /> : <canvas ref={canvasRef} className="sequence-hero__canvas" role="img" aria-label="A coating project moves from finished home to spray application and back as the page scrolls" />}
+          <img src={INITIAL_IMAGE} alt="Freshly coated modern home exterior" className="sequence-hero__initial" />
+          {reducedMotion ? null : <canvas ref={canvasRef} className="sequence-hero__canvas" role="img" aria-label="A coating project moves from finished home to spray application and back as the page scrolls" />}
           <div ref={shadeRef} className="sequence-hero__shade" />
           <div ref={copyRef} className="sequence-hero__copy">
             <p className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-primary sm:text-sm">Professional airless spray coating · South Africa</p>
